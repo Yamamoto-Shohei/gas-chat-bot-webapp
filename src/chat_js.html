@@ -1,0 +1,75 @@
+<script type="text/babel">
+  let messagebank =[]
+  const element = document.documentElement
+  const Chat = () => {
+    const [messages, setMessages] = React.useState([]);
+    const [inputMessage, setInputMessage] = React.useState('');
+    React.useEffect(() => {
+      scrollTo(0, element.scrollHeight - element.clientHeight,);
+    }, [messages])
+    const addMessage = (message) => {
+      messagebank.push(message)
+      setMessages([...messagebank])
+    }
+    const sendMessageHandle = () => {
+      if (!inputMessage) return
+      addMessage({value: inputMessage, isMe: true})
+      callBot(inputMessage)
+      setInputMessage('')
+    }
+    const callBot = (value) => {
+      google.script.run.withSuccessHandler((response) => {
+        addMessage({value: response.bestResponse.utterance, isMe:false})
+      }).withFailureHandler((e) => {
+        addMessage({value: JSON.stringify(e), isMe:false})
+      }).callBot(value)
+    }
+    const Message = ({value, isMe}) => (
+      <div className="col s12">
+        <div className={`card-panel col s5 green darken-1 ${isMe? 'offset-s6': 'offset-s1'}`}>
+          <p className="white-text">
+            {value.split("\n").map((item, index) => <React.Fragment key={index}>{item}<br /></React.Fragment>)}
+          </p>
+        </div>  
+      </div>
+    )
+    return (
+      <div className="row">
+        <header>
+          <div className="container">
+            <div className="col s12">
+              <h5 className="blue-text text-lighten-2 center-align">
+                <p>
+                  Chat to bot!!
+                </p>
+              </h5>
+            </div>
+          </div>
+        </header>
+        <main>
+          <div className="container">
+            <div className="col s12">
+              {messages.map(({value, isMe}) => {
+                return <Message value={value} isMe={isMe} />
+              })}
+            </div>
+          </div>
+        </main>
+        <footer>
+          <div className="container">
+            <div className="col s9 offset-s1 input-field">
+              <i className="material-icons white-text prefix">message</i>
+              <textarea className="materialize-textarea white-text" id="input-message" value={inputMessage} required={true} onChange={(e) => setInputMessage(e.target.value)}/>
+              <label className="white-text" for="input-message">message</label>
+            </div>
+            <div className="col s1 valign-wrapper">
+              <button className="btn-floating btn-large waves-effect waves-light" onClick={sendMessageHandle}>
+                <i className="material-icons">send</i>
+              </button>
+            </div>
+          </div>
+        </footer>
+      </div>
+    )
+  }
+</script>
