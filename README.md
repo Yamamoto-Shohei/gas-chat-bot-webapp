@@ -47,7 +47,7 @@ https://github.com/Yamamoto-Shohei/gas-chat-bot-webapp
 
 * GASで、Reactを利用した画面を実装する方法。
 
-  * ReactのCNDを読み込み
+  * ReactのCDNを読み込み
 
       ```html:index.html
       <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
@@ -55,7 +55,7 @@ https://github.com/Yamamoto-Shohei/gas-chat-bot-webapp
       <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
       ```
 
-  * Reactで実装する対象のDivを準備して、レンダリング
+  * Reactで実装する対象のdivを準備して、レンダリング
 
       ```html:index.html
       <div id="index"></div>
